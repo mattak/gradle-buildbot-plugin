@@ -25,7 +25,6 @@ class IrcPostTask extends DefaultTask {
     @TaskAction
     def postIrc() {
         init()
-        println "-------------------------------"
         messageListener = { channel, sender, login, hostname, message -> println "message: $message"}
 
         IrcBot bot = new IrcBot(nick, messageListener)
