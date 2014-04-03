@@ -1,0 +1,44 @@
+apply plugin: 'groovy'
+apply plugin: 'maven'
+
+group = 'me.mattak'
+archivesBaseName = 'buildbot'
+version = '0.0.1'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile gradleApi()
+    groovy localGroovy()
+    compile 'pircbot:pircbot:1.5.0'
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "file://${System.env.HOME}/.m2/repository")
+        }
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.11'
+}
+
+task javadocJar(type: Jar, dependsOn: groovydoc) {
+    classifier = 'javadoc'
+    from "${buildDir}/javadoc"
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+artifacts {
+    archives jar
+    archives javadocJar
+    archives sourcesJar
+}
